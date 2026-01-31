@@ -2,13 +2,10 @@ name: ci-dockerhub
 
 on:
   push:
-    branches:
-      - main
-    tags:
-      - "*"
+    branches: [ "main" ]
+    tags: [ "*" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
   build-test-push:
@@ -23,7 +20,7 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install dependencies
+      - name: Install deps
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
@@ -31,7 +28,7 @@ jobs:
       - name: Run tests
         run: pytest -q
 
-      - name: Docker metadata
+      - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -53,7 +50,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
